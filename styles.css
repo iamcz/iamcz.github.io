@@ -18,7 +18,15 @@ ul {
 	list-style: none;
 }
 
+/*
 body {
+	background: #FDF6E3;
+	color: #657B83;
+	font-family: 'Courier New', monospace;
+}
+*/
+
+#body_container {
 	background: #FDF6E3;
 	color: #657B83;
 	font-family: 'Courier New', monospace;
@@ -26,6 +34,11 @@ body {
 
 h1, h2 {
 	font-family: 'Montserrat', sans-serif;
+}
+
+#body_container a {
+	font: inherit;
+	color: inherit;
 }
 
 /********** clear-fix **********/
@@ -292,15 +305,15 @@ nav {
 	font-size: 18px;
 }
 
-#contact_form {
+#body_container #contact_form {
 	width: 380px;
 	padding: 0 10px;
 
 	float: left;
 }
 
-#contact_form input, 
-#contact_form textarea {
+html body #body_container #contact_form input, 
+html body #body_container #contact_form textarea {
 	background: #FFF;
 	padding: 5px;
 	width: calc(100% - 10px);
@@ -311,12 +324,12 @@ nav {
 	outline: 0;
 }
 
-#contact_form textarea {
+html body #body_container #contact_form textarea {
 	resize: none;
 	height: 120px;
 }
 
-#contact_form button {
+html body #body_container #contact_form button {
 	width: 100%;
 	padding: 5px 10px;
 	background: #2AA198;
@@ -325,13 +338,13 @@ nav {
 	box-shadow: 0 2px 0 #168D84;
 }
 
-#contact_form button:hover {
+html body #body_container #contact_form button:hover {
 	background: #859900;
 	
 	box-shadow: 0 2px 0 #717100;
 }
 
-#contact_form button:active {
+html body #body_container #contact_form button:active {
 	margin-top: 2px;
 	box-shadow: none;
 }
@@ -364,4 +377,9 @@ nav {
 
 #resume_section a:hover {
 	opacity: 0.6;
+}
+
+/********** override stupid jquery css **********/
+.ui-input-text.ui-body-inherit.ui-corner-all.ui-shadow-inset {
+	background-color: transparent;
 }
