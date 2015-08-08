@@ -34,9 +34,9 @@
       <div class="content">
         <div id="greeting_container">
           <h1>I am Charles Zahn</h1>
-          <h2><span>Software Engineer</span> by trade<h2>
-              <h2><span>Mathematician</span> at heart<h2>
-                  <h2><span>Music Nerd</span> by choice<h2>
+          <h2><span>Software Engineer</span> by trade</h2>
+          <h2><span>Mathematician</span> at heart</h2>
+          <h2><span>Music Nerd</span> by choice</h2>
         </div>
       </div>
     </section>
@@ -268,14 +268,14 @@ $(function () {
   });
 
   // Re-enable default link click for **actual** links
-  $("a").on("click", function (event) {
+  $("a").each(function () {
     href = $(this).attr("href");
 
     if (typeof href !== "undefined") {
-      window.location = $(this).attr("href");
+      $(this).attr({"target": "_top"});
     }
   });
-})
+});
 </script>
 
 </html>
