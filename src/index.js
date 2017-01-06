@@ -1,5 +1,10 @@
-const f = () => {
-  console.log('foobar');
-};
+import React, { Component } from 'react';
+import { render } from 'react-dom';
 
-f();
+const HelloWorldComponent = () => {
+  return (
+    <h1>Hello World</h1>
+  );
+}
+
+render(<HelloWorldComponent />, document.getElementById('root'));
