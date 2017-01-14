@@ -1,0 +1,19 @@
+/********** reset **********/
+html, body, section, div, h1, h2, p, span, ul, li, a, form, input, textarea,
+button {
+  padding: 0;
+  border: 0;
+  outline: 0;
+  margin: 0;
+
+  background: transparent;
+
+  font: inherit;
+  color: inherit;
+
+  text-decoration: none;
+}
+
+ul {
+  list-style: none;
+}
