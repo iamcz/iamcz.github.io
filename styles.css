@@ -17,3 +17,17 @@ button {
 ul {
   list-style: none;
 }
+
+.main-content {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.headline {
+  font-size: 2.5em;
+  text-align: center;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 700;
+}

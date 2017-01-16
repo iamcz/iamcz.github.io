@@ -26502,28 +26502,85 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var Home = function (_PureComponent) {
-	  _inherits(Home, _PureComponent);
+	var IDENTITIES = ['Charles Zahn', 'c + i'];
 	
-	  function Home() {
+	var RATE = 0.15 * 1000;
+	var DELAY = 3 * 1000;
+	
+	var Home = function (_Component) {
+	  _inherits(Home, _Component);
+	
+	  function Home(props) {
 	    _classCallCheck(this, Home);
 	
-	    return _possibleConstructorReturn(this, (Home.__proto__ || Object.getPrototypeOf(Home)).apply(this, arguments));
+	    var _this = _possibleConstructorReturn(this, (Home.__proto__ || Object.getPrototypeOf(Home)).call(this, props));
+	
+	    _this.getFullIdentity = function () {
+	      return IDENTITIES[_this.state.identityIndex];
+	    };
+	
+	    _this.getIdentity = function () {
+	      return _this.getFullIdentity().slice(0, _this.state.identityCharCount);
+	    };
+	
+	    _this.isFull = function () {
+	      return _this.state.identityCharCount === _this.getFullIdentity().length;
+	    };
+	
+	    _this.isEmpty = function () {
+	      return _this.state.identityCharCount === 0;
+	    };
+	
+	    _this.updateIdentity = function () {
+	      var isEmpty = _this.state.identityCharCount === 0;
+	      var isFull = _this.isFull();
+	      var identityIndex = isEmpty ? (_this.state.identityIndex + 1) % IDENTITIES.length : _this.state.identityIndex;
+	
+	      var erasingShouldChange = _this.state.erasing && isEmpty || !_this.state.erasing && isFull;
+	      var erasing = erasingShouldChange ? !_this.state.erasing : _this.state.erasing;
+	      var identityCharCount = _this.state.identityCharCount + (erasing ? -1 : 1);
+	
+	      _this.setState({ identityIndex: identityIndex, identityCharCount: identityCharCount, erasing: erasing });
+	    };
+	
+	    _this.setTimer = function () {
+	      setTimeout(function () {
+	        _this.updateIdentity();
+	        _this.setTimer();
+	      }, _this.isFull() ? DELAY : RATE);
+	    };
+	
+	    _this.state = {
+	      identityIndex: 0,
+	      identityCharCount: IDENTITIES[0].length - 1,
+	      erasing: false
+	    };
+	    return _this;
 	  }
 	
 	  _createClass(Home, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      this.setTimer();
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	      return _react2.default.createElement(
 	        'div',
-	        { style: { background: 'gray', color: 'white', height: '100vh' } },
-	        _react2.default.createElement('h1', null)
+	        { className: 'main-content' },
+	        _react2.default.createElement(
+	          'h1',
+	          { className: 'headline' },
+	          'I am ',
+	          this.getIdentity()
+	        )
 	      );
 	    }
 	  }]);
 	
 	  return Home;
-	}(_react.PureComponent);
+	}(_react.Component);
 	
 	exports.default = Home;
 

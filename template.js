@@ -6,9 +6,8 @@ const Html = (props) => (
       <meta charSet='utf-8' />
       <meta httpEquiv='X-UA-Compatible' content='IE=edge' />
       <meta name='viewport' content='width=device-width, minimum-scale=1.0' />
-      <title>Super awesome package</title>
-      <link rel='stylesheet' type='text/css' href='styles.css' />
-      <script dangerouslySetInnerHTML={{ __html: 'console.log("analytics")' }} />
+      <title>I am Charles Zahn</title>
+      <link rel='stylesheet' type='text/css' href='/styles.css' />
     </head>
     <body>
       <div id='root' dangerouslySetInnerHTML={{ __html: props.body }} />
