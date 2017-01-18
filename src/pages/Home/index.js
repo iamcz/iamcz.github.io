@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import CSSTransitionGroup from 'react-addons-css-transition-group';
 
 const IDENTITIES = [
   'Charles Zahn',
@@ -13,8 +14,8 @@ export default class Home extends Component {
     super(props);
     this.state = {
       identityIndex: 0,
-      identityCharCount: IDENTITIES[0].length - 1,
-      erasing: false,
+      identityCharCount: IDENTITIES[0].length,
+      erasing: true,
     };
   }
 
@@ -24,7 +25,7 @@ export default class Home extends Component {
   isEmpty = () => this.state.identityCharCount === 0;
 
   updateIdentity = () => {
-    const isEmpty = this.state.identityCharCount === 0;
+    const isEmpty = this.isEmpty();
     const isFull = this.isFull();
     const identityIndex = isEmpty ?
       (this.state.identityIndex + 1) % IDENTITIES.length :
@@ -51,7 +52,7 @@ export default class Home extends Component {
   render() {
     return (
       <div className='main-content'>
-        <h1 className='headline'>I am {this.getIdentity()}</h1>
+        <h1 className='headline'>{`I am ${this.getIdentity()}`}</h1>
       </div>
     );
   }
