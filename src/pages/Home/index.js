@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import CSSTransitionGroup from 'react-addons-css-transition-group';
+import HeatMap from './HeatMap';
 
 const IDENTITIES = [
   'Charles Zahn',
@@ -45,14 +45,21 @@ export default class Home extends Component {
     }, this.isFull() ? DELAY : RATE);
   }
 
+  setDeviceHeights = () => {
+  }
+
   componentDidMount() {
-    this.setTimer()
+    this.setTimer();
+    this.setDeviceHeights()
   }
 
   render() {
     return (
-      <div className='main-content'>
-        <h1 className='headline'>{`I am ${this.getIdentity()}`}</h1>
+      <div>
+        <HeatMap />
+        <div className='main-content'>
+          <h1 className='headline'>{`I am ${this.getIdentity()}`}</h1>
+        </div>
       </div>
     );
   }
