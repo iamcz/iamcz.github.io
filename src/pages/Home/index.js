@@ -57,8 +57,10 @@ export default class Home extends Component {
     return (
       <div>
         <HeatMap />
-        <div className='main-content'>
-          <h1 className='headline'>{`I am ${this.getIdentity()}`}</h1>
+        <div className='absolute'>
+          <div className='main-content'>
+            <h1 className='headline'>{`I am ${this.getIdentity()}`}</h1>
+          </div>
         </div>
       </div>
     );

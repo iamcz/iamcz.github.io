@@ -37,3 +37,8 @@ ul {
   height: 100%;
   width: 100%;
 }
+
+.absolute {
+  position: absolute;
+  width: 100%;
+}

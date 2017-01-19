@@ -26720,11 +26720,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	        _react2.default.createElement(_HeatMap2.default, null),
 	        _react2.default.createElement(
 	          'div',
-	          { className: 'main-content' },
+	          { className: 'absolute' },
 	          _react2.default.createElement(
-	            'h1',
-	            { className: 'headline' },
-	            'I am ' + this.getIdentity()
+	            'div',
+	            { className: 'main-content' },
+	            _react2.default.createElement(
+	              'h1',
+	              { className: 'headline' },
+	              'I am ' + this.getIdentity()
+	            )
 	          )
 	        )
 	      );
@@ -26773,8 +26777,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _reactDom = __webpack_require__(32);
 	
-	var _reactDom2 = _interopRequireDefault(_reactDom);
-	
 	var _simpleheat = __webpack_require__(238);
 	
 	var _simpleheat2 = _interopRequireDefault(_simpleheat);
@@ -26787,25 +26789,150 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
+	var RESIZE = 'resize';
+	var DIMENSIONS = 3;
+	var DELTA = 1 / 10000;
+	var POINT_RADIUS = 10;
+	var BLUR_RADIUS = 15;
+	var GRADIENT = { 0: 'white', 1: '#bb0a1e' };
+	
 	var HeatMap = function (_Component) {
 	  _inherits(HeatMap, _Component);
 	
-	  function HeatMap(props) {
+	  function HeatMap() {
+	    var _ref;
+	
+	    var _temp, _this, _ret;
+	
 	    _classCallCheck(this, HeatMap);
 	
-	    var _this = _possibleConstructorReturn(this, (HeatMap.__proto__ || Object.getPrototypeOf(HeatMap)).call(this, props));
+	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	      args[_key] = arguments[_key];
+	    }
 	
-	    _this.setHeights = function () {
-	      var canvas = _reactDom2.default.findDOMNode(_this.refs.canvas);
+	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = HeatMap.__proto__ || Object.getPrototypeOf(HeatMap)).call.apply(_ref, [this].concat(args))), _this), _this.outOfBounds = function (point) {
+	      return undefined !== point.find(function (val) {
+	        return val >= 0 && val <= 1;
+	      });
+	    }, _this.getNextPoint = function (lastPoint) {
+	      var z = 2 * Math.random() - 1;
+	      var theta = 2 * Math.PI * Math.random();
+	      var sqrt = Math.sqrt(1 - z * z);
+	      var x = sqrt * Math.cos(theta);
+	      var y = sqrt * Math.sin(theta);
+	      var delta = [x, y, z].map(function (val) {
+	        return val * _this.props.stepSize;
+	      });
+	      var nextPoint = lastPoint.map(function (val, idx) {
+	        return val + delta[idx];
+	      });
+	      if (_this.outOfBounds(nextPoint)) {
+	        return _this.randomPoint();
+	      } // new path generation
+	      return nextPoint;
+	    }, _this.updatePaths = function () {
+	      _this.paths.forEach(function (path) {
+	        var lastPoint = path[path.length - 1];
+	        path.push(_this.getNextPoint(lastPoint));
+	        if (path.length > _this.props.memory) {
+	          path.shift();
+	        }
+	      });
+	    }, _this.transformedPoint = function (point) {
+	      var x = point[0],
+	          y = point[1],
+	          z = point[2];
+	      return [x * _this.height, y * _this.height, z];
+	    }, _this.transformedPaths = function () {
+	      return _this.paths.map(function (path) {
+	        return path.map(_this.transformedPoint);
+	      }).reduce(function (a, b) {
+	        return a.concat(b);
+	      });
+	    }, _this.randomPoint = function () {
+	      var point = [];
+	      for (var i = 0; i < DIMENSIONS; i += 1) {
+	        point.push(Math.random());
+	      }
+	      return point;
+	    }, _this.setPaths = function () {
+	      var _this2 = _this,
+	          props = _this2.props;
+	
+	      var points = [];
+	      for (var i = 0; i < props.numPaths; i += 1) {
+	        points.push(_this.randomPoint());
+	      }
+	      _this.paths = points.map(function (point) {
+	        return [point];
+	      });
+	    }, _this.clearPaths = function () {
+	      delete _this.paths;
+	    }, _this.getCanvasNode = function () {
+	      return (0, _reactDom.findDOMNode)(_this.refs.canvas);
+	    }, _this.clearDimensions = function () {
+	      delete _this.height;
+	      delete _this.width;
+	    }, _this.setDimensions = function () {
+	      var canvas = _this.getCanvasNode();
 	
 	      _this.height = canvas.clientHeight;
 	      _this.width = canvas.clientWidth;
-	    };
-	
-	    return _this;
+	    }, _this.onResize = function () {
+	      // We don't call this.heatMap.resize because we call this.heatMap.data on every interval update
+	      // since we want there to be a limited memory on the the heat map thus resize would be a waste
+	      // of processing. If this had an infinite memory this.heatMap.resize may offer a performance
+	      // improvement.
+	      _this.setDimensions();
+	    }, _this.setResizeListener = function () {
+	      window.addEventListener(RESIZE, _this.onResize);
+	    }, _this.clearResizeListener = function () {
+	      window.removeEventListener(RESIZE, _this.onResize);
+	    }, _this.setInterval = function () {
+	      _this.interval = window.setInterval(function () {
+	        _this.updatePaths();
+	        // const wants = this.transformedPaths();
+	        // debugger;
+	        _this.heatMap.data(_this.transformedPaths()).draw(); // necessary for limited memory functionality
+	      }, _this.props.frameRate);
+	    }, _this.clearInterval = function () {
+	      window.clearInterval(_this.interval);
+	      delete _this.interval;
+	    }, _this.setHeatMap = function () {
+	      _this.heatMap = (0, _simpleheat2.default)(_this.getCanvasNode());
+	      _this.heatMap.radius(POINT_RADIUS, BLUR_RADIUS);
+	      _this.heatMap.gradient(GRADIENT);
+	    }, _this.clearHeatMap = function () {
+	      _this.heatMap.clear();
+	      delete _this.heatMap;
+	    }, _this.calculateData = function () {
+	      _this.updateData();
+	    }, _temp), _possibleConstructorReturn(_this, _ret);
 	  }
 	
+	  // rerun this on numPaths prop is updated
+	
+	
+	  // clearInterval & setInterval will have to be rerun every time frameRate prop is updated
+	
+	
 	  _createClass(HeatMap, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      this.setDimensions();
+	      this.setInterval();
+	      this.setHeatMap();
+	      this.setPaths();
+	    }
+	  }, {
+	    key: 'componentWillUnmount',
+	    value: function componentWillUnmount() {
+	      this.clearDimensions();
+	      this.clearInterval();
+	      this.clearHeatMap();
+	      this.clearPath();
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	      return _react2.default.createElement('canvas', { className: 'canvas', ref: 'canvas' });
@@ -26815,6 +26942,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return HeatMap;
 	}(_react.Component);
 	
+	HeatMap.propTypes = {
+	  numPaths: _react.PropTypes.number,
+	  frameRate: _react.PropTypes.number,
+	  stepSize: _react.PropTypes.number,
+	  memory: _react.PropTypes.number };
+	HeatMap.defaultProps = {
+	  numPaths: 3,
+	  frameRate: 0.1 * 1000,
+	  stepSize: 1 / 1000,
+	  memory: 100
+	};
 	exports.default = HeatMap;
 
 /***/ },
