@@ -26737,6 +26737,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        navigator.vibrate(1000);
 	      }
 	      window.addEventListener('resize', function () {
+	        console.log('foobar');
 	        _this2.setState({ height: window.innerHeight });
 	      });
 	      this.setState({ height: window.innerHeight });

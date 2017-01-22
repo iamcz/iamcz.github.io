@@ -57,6 +57,7 @@ export default class Home extends Component {
       navigator.vibrate(1000);
     }
     window.addEventListener('resize', () => {
+      console.log('foobar');
       this.setState({ height: window.innerHeight });
     });
     this.setState({ height: window.innerHeight });
