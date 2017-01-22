@@ -8,7 +8,7 @@ const DELTA = 1 / 10000;
 const POINT_RADIUS = 20;
 const BLUR_RADIUS = 60;
 const GRADIENT = { 0: 'white', 1: '#bb0a1e' };
-const NUM_RUNS = 50;
+const NUM_RUNS = 5;
 
 export default class HeatMap extends PureComponent {
   static propTypes = {
@@ -20,7 +20,7 @@ export default class HeatMap extends PureComponent {
 
   static defaultProps = {
     numPaths: 3,
-    frameRate: 0.05 * 1000,
+    frameRate: 0.02 * 1000,
     stepSize: Number.MIN_VALUE,
     memory: 1000,
   };

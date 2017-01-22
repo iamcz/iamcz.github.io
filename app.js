@@ -26704,7 +26704,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var erasing = erasingShouldChange ? !_this.state.erasing : _this.state.erasing;
 	      var identityCharCount = _this.state.identityCharCount + (erasing ? -1 : 1);
 	
-	      _this.setState({ identityIndex: identityIndex, identityCharCount: identityCharCount, erasing: erasing });
+	      // this.setState({ identityIndex, identityCharCount, erasing });
 	    };
 	
 	    _this.setTimer = function () {
