@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import HeatMap from './HeatMap';
 
+const VIBRATE_ENABLED = !!window.navigator;
+
 const IDENTITIES = [
   'Charles Zahn',
   'c + i',
@@ -51,6 +53,9 @@ export default class Home extends Component {
   componentDidMount() {
     this.setTimer();
     this.setDeviceHeights()
+    if ("vibrate" in navigator) {
+      navigator.vibrate(1000);
+    }
   }
 
   render() {
