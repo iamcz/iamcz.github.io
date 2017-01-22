@@ -26666,6 +26666,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
+	var VIBRATE_ENABLED = !!window.navigator;
+	
 	var IDENTITIES = ['Charles Zahn', 'c + i'];
 	
 	var RATE = 0.15 * 1000;
@@ -26729,6 +26731,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function componentDidMount() {
 	      this.setTimer();
 	      this.setDeviceHeights();
+	      if ("vibrate" in navigator) {
+	        navigator.vibrate(1000);
+	      }
 	    }
 	  }, {
 	    key: 'render',
