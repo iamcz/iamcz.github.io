@@ -26610,7 +26610,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _Home3 = _interopRequireDefault(_Home2);
 	
-	var _NotFound2 = __webpack_require__(239);
+	var _NotFound2 = __webpack_require__(240);
 	
 	var _NotFound3 = _interopRequireDefault(_NotFound2);
 	
@@ -26628,6 +26628,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	exports.default = undefined;
+	
+	var _Home = __webpack_require__(236);
+	
+	var _Home2 = _interopRequireDefault(_Home);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	exports.default = _Home2.default;
+
+/***/ },
+/* 236 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
@@ -26635,7 +26654,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _HeatMap = __webpack_require__(236);
+	var _HeatMap = __webpack_require__(237);
 	
 	var _HeatMap2 = _interopRequireDefault(_HeatMap);
 	
@@ -26741,7 +26760,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = Home;
 
 /***/ },
-/* 236 */
+/* 237 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -26751,7 +26770,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 	exports.default = undefined;
 	
-	var _HeatMap = __webpack_require__(237);
+	var _HeatMap = __webpack_require__(238);
 	
 	var _HeatMap2 = _interopRequireDefault(_HeatMap);
 	
@@ -26760,7 +26779,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = _HeatMap2.default;
 
 /***/ },
-/* 237 */
+/* 238 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -26777,7 +26796,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _reactDom = __webpack_require__(32);
 	
-	var _simpleheat = __webpack_require__(238);
+	var _simpleheat = __webpack_require__(239);
 	
 	var _simpleheat2 = _interopRequireDefault(_simpleheat);
 	
@@ -26792,122 +26811,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	var RESIZE = 'resize';
 	var DIMENSIONS = 3;
 	var DELTA = 1 / 10000;
-	var POINT_RADIUS = 10;
-	var BLUR_RADIUS = 15;
+	var POINT_RADIUS = 20;
+	var BLUR_RADIUS = 60;
 	var GRADIENT = { 0: 'white', 1: '#bb0a1e' };
+	var NUM_RUNS = 50;
 	
-	var HeatMap = function (_Component) {
-	  _inherits(HeatMap, _Component);
+	var HeatMap = function (_PureComponent) {
+	  _inherits(HeatMap, _PureComponent);
 	
-	  function HeatMap() {
-	    var _ref;
-	
-	    var _temp, _this, _ret;
-	
+	  function HeatMap(props) {
 	    _classCallCheck(this, HeatMap);
 	
-	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-	      args[_key] = arguments[_key];
-	    }
+	    var _this = _possibleConstructorReturn(this, (HeatMap.__proto__ || Object.getPrototypeOf(HeatMap)).call(this, props));
 	
-	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = HeatMap.__proto__ || Object.getPrototypeOf(HeatMap)).call.apply(_ref, [this].concat(args))), _this), _this.outOfBounds = function (point) {
-	      return undefined !== point.find(function (val) {
-	        return val >= 0 && val <= 1;
-	      });
-	    }, _this.getNextPoint = function (lastPoint) {
-	      var z = 2 * Math.random() - 1;
-	      var theta = 2 * Math.PI * Math.random();
-	      var sqrt = Math.sqrt(1 - z * z);
-	      var x = sqrt * Math.cos(theta);
-	      var y = sqrt * Math.sin(theta);
-	      var delta = [x, y, z].map(function (val) {
-	        return val * _this.props.stepSize;
-	      });
-	      var nextPoint = lastPoint.map(function (val, idx) {
-	        return val + delta[idx];
-	      });
-	      if (_this.outOfBounds(nextPoint)) {
-	        return _this.randomPoint();
-	      } // new path generation
-	      return nextPoint;
-	    }, _this.updatePaths = function () {
-	      _this.paths.forEach(function (path) {
-	        var lastPoint = path[path.length - 1];
-	        path.push(_this.getNextPoint(lastPoint));
-	        if (path.length > _this.props.memory) {
-	          path.shift();
-	        }
-	      });
-	    }, _this.transformedPoint = function (point) {
-	      var x = point[0],
-	          y = point[1],
-	          z = point[2];
-	      return [x * _this.height, y * _this.height, z];
-	    }, _this.transformedPaths = function () {
-	      return _this.paths.map(function (path) {
-	        return path.map(_this.transformedPoint);
-	      }).reduce(function (a, b) {
-	        return a.concat(b);
-	      });
-	    }, _this.randomPoint = function () {
-	      var point = [];
-	      for (var i = 0; i < DIMENSIONS; i += 1) {
-	        point.push(Math.random());
-	      }
-	      return point;
-	    }, _this.setPaths = function () {
-	      var _this2 = _this,
-	          props = _this2.props;
+	    _initialiseProps.call(_this);
 	
-	      var points = [];
-	      for (var i = 0; i < props.numPaths; i += 1) {
-	        points.push(_this.randomPoint());
-	      }
-	      _this.paths = points.map(function (point) {
-	        return [point];
-	      });
-	    }, _this.clearPaths = function () {
-	      delete _this.paths;
-	    }, _this.getCanvasNode = function () {
-	      return (0, _reactDom.findDOMNode)(_this.refs.canvas);
-	    }, _this.clearDimensions = function () {
-	      delete _this.height;
-	      delete _this.width;
-	    }, _this.setDimensions = function () {
-	      var canvas = _this.getCanvasNode();
-	
-	      _this.height = canvas.clientHeight;
-	      _this.width = canvas.clientWidth;
-	    }, _this.onResize = function () {
-	      // We don't call this.heatMap.resize because we call this.heatMap.data on every interval update
-	      // since we want there to be a limited memory on the the heat map thus resize would be a waste
-	      // of processing. If this had an infinite memory this.heatMap.resize may offer a performance
-	      // improvement.
-	      _this.setDimensions();
-	    }, _this.setResizeListener = function () {
-	      window.addEventListener(RESIZE, _this.onResize);
-	    }, _this.clearResizeListener = function () {
-	      window.removeEventListener(RESIZE, _this.onResize);
-	    }, _this.setInterval = function () {
-	      _this.interval = window.setInterval(function () {
-	        _this.updatePaths();
-	        // const wants = this.transformedPaths();
-	        // debugger;
-	        _this.heatMap.data(_this.transformedPaths()).draw(); // necessary for limited memory functionality
-	      }, _this.props.frameRate);
-	    }, _this.clearInterval = function () {
-	      window.clearInterval(_this.interval);
-	      delete _this.interval;
-	    }, _this.setHeatMap = function () {
-	      _this.heatMap = (0, _simpleheat2.default)(_this.getCanvasNode());
-	      _this.heatMap.radius(POINT_RADIUS, BLUR_RADIUS);
-	      _this.heatMap.gradient(GRADIENT);
-	    }, _this.clearHeatMap = function () {
-	      _this.heatMap.clear();
-	      delete _this.heatMap;
-	    }, _this.calculateData = function () {
-	      _this.updateData();
-	    }, _temp), _possibleConstructorReturn(_this, _ret);
+	    return _this;
 	  }
 	
 	  // rerun this on numPaths prop is updated
@@ -26917,12 +26836,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	
 	  _createClass(HeatMap, [{
+	    key: 'componentWillMount',
+	    value: function componentWillMount() {}
+	  }, {
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
 	      this.setDimensions();
 	      this.setInterval();
 	      this.setHeatMap();
 	      this.setPaths();
+	      this.setResizeListener();
 	    }
 	  }, {
 	    key: 'componentWillUnmount',
@@ -26931,16 +26854,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.clearInterval();
 	      this.clearHeatMap();
 	      this.clearPath();
+	      this.clearResizeListener();
 	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      return _react2.default.createElement('canvas', { className: 'canvas', ref: 'canvas' });
+	      var height = this.height,
+	          width = this.width;
+	
+	      return _react2.default.createElement('canvas', { className: 'canvas', ref: 'canvas', height: height, width: width });
 	    }
 	  }]);
 	
 	  return HeatMap;
-	}(_react.Component);
+	}(_react.PureComponent);
 	
 	HeatMap.propTypes = {
 	  numPaths: _react.PropTypes.number,
@@ -26949,14 +26876,174 @@ return /******/ (function(modules) { // webpackBootstrap
 	  memory: _react.PropTypes.number };
 	HeatMap.defaultProps = {
 	  numPaths: 3,
-	  frameRate: 0.1 * 1000,
-	  stepSize: 1 / 1000,
-	  memory: 100
+	  frameRate: 0.05 * 1000,
+	  stepSize: Number.MIN_VALUE,
+	  memory: 1000
 	};
+	
+	var _initialiseProps = function _initialiseProps() {
+	  var _this2 = this;
+	
+	  this.outOfBounds = function (point) {
+	    return undefined !== point.find(function (val) {
+	      return val >= 0 && val <= 1;
+	    });
+	  };
+	
+	  this.getNextPoint = function (path) {
+	    var lastPoint = path[path.length - 1];
+	    var pointBeforeLast = path[path.length - 2];
+	    var lastDelta = void 0;
+	    if (!!pointBeforeLast) {
+	      lastDelta = pointBeforeLast.map(function (val, i) {
+	        return lastPoint[i] - val;
+	      });
+	    } else {
+	      lastDelta = [0, 0, 0];
+	    }
+	    var z = 2 * Math.random() - 1;
+	    var theta = 2 * Math.PI * Math.random();
+	    var sqrt = Math.sqrt(1 - z * z);
+	    var x = sqrt * Math.cos(theta);
+	    var y = sqrt * Math.sin(theta);
+	    var delta = [x, y, z].map(function (val, i) {
+	      return val + lastDelta[i];
+	    }).map(function (val) {
+	      return val * _this2.props.stepSize;
+	    });
+	    var nextPoint = lastPoint.map(function (val, idx) {
+	      return val + delta[idx];
+	    });
+	    if (_this2.outOfBounds(nextPoint)) {
+	      return _this2.randomPoint();
+	    } // new path generation
+	    return nextPoint;
+	  };
+	
+	  this.updatePaths = function () {
+	    _this2.paths.forEach(function (path) {
+	      path.push(_this2.getNextPoint(path));
+	      if (path.length > _this2.props.memory) {
+	        path.shift();
+	      }
+	    });
+	  };
+	
+	  this.transformedPoint = function (point) {
+	    var x = point[0],
+	        y = point[1],
+	        z = point[2];
+	    return [x * _this2.width, y * _this2.height, z];
+	  };
+	
+	  this.transformedPaths = function () {
+	    return _this2.paths.map(function (path) {
+	      return path.map(_this2.transformedPoint);
+	    }).reduce(function (a, b) {
+	      return a.concat(b);
+	    });
+	  };
+	
+	  this.randomPoint = function () {
+	    var point = [];
+	    for (var i = 0; i < DIMENSIONS; i += 1) {
+	      point.push(Math.random());
+	    }
+	    return point;
+	  };
+	
+	  this.setPaths = function () {
+	    var props = _this2.props;
+	
+	    var points = [];
+	    for (var i = 0; i < props.numPaths; i += 1) {
+	      points.push(_this2.randomPoint());
+	    }
+	    _this2.paths = points.map(function (point) {
+	      return [point];
+	    });
+	  };
+	
+	  this.clearPaths = function () {
+	    delete _this2.paths;
+	  };
+	
+	  this.getCanvasNode = function () {
+	    return (0, _reactDom.findDOMNode)(_this2.refs.canvas);
+	  };
+	
+	  this.clearDimensions = function () {
+	    delete _this2.height;
+	    delete _this2.width;
+	  };
+	
+	  this.setDimensions = function () {
+	    var canvas = _this2.getCanvasNode();
+	
+	    _this2.height = window.innerHeight;
+	    _this2.width = window.innerWidth;
+	    var height = _this2.height,
+	        width = _this2.width;
+	
+	    canvas.setAttribute('height', height);
+	    canvas.setAttribute('width', width);
+	  };
+	
+	  this.onResize = function () {
+	    // We don't call this.heatMap.resize because we call this.heatMap.data on every interval update
+	    // since we want there to be a limited memory on the the heat map thus resize would be a waste
+	    // of processing. If this had an infinite memory this.heatMap.resize may offer a performance
+	    // improvement.
+	    _this2.setDimensions();
+	    _this2.heatMap.resize();
+	    var scale = _this2.width * _this2.height / (1440 * 803);
+	    var adjustedScale = scale * (1 - scale);
+	    _this2.heatMap.radius(POINT_RADIUS * scale, BLUR_RADIUS * scale);
+	  };
+	
+	  this.setResizeListener = function () {
+	    window.addEventListener(RESIZE, _this2.onResize);
+	  };
+	
+	  this.clearResizeListener = function () {
+	    window.removeEventListener(RESIZE, _this2.onResize);
+	  };
+	
+	  this.setInterval = function () {
+	    _this2.interval = window.setInterval(function () {
+	      for (var i = 0; i < NUM_RUNS; i += 1) {
+	        _this2.updatePaths();
+	      }
+	      _this2.heatMap.data(_this2.transformedPaths()).draw(); // necessary for limited memory functionality
+	    }, _this2.props.frameRate);
+	  };
+	
+	  this.clearInterval = function () {
+	    window.clearInterval(_this2.interval);
+	    delete _this2.interval;
+	  };
+	
+	  this.setHeatMap = function () {
+	    _this2.heatMap = (0, _simpleheat2.default)(_this2.getCanvasNode());
+	    var scale = _this2.width / 1440;
+	    _this2.heatMap.radius(POINT_RADIUS * scale, BLUR_RADIUS * scale);
+	    _this2.heatMap.gradient(GRADIENT);
+	  };
+	
+	  this.clearHeatMap = function () {
+	    _this2.heatMap.clear();
+	    delete _this2.heatMap;
+	  };
+	
+	  this.calculateData = function () {
+	    _this2.updateData();
+	  };
+	};
+	
 	exports.default = HeatMap;
 
 /***/ },
-/* 238 */
+/* 239 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -27094,7 +27181,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 239 */
+/* 240 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
