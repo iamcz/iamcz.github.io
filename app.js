@@ -26729,15 +26729,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	  _createClass(Home, [{
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
+	      var _this2 = this;
+	
 	      this.setTimer();
 	      this.setDeviceHeights();
 	      if ("vibrate" in navigator) {
 	        navigator.vibrate(1000);
 	      }
+	      window.addEventListener('resize', function () {
+	        _this2.setState({ height: window.innerHeight });
+	      });
+	      this.setState({ height: window.innerHeight });
 	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
+	      var height = this.state.height;
+	
 	      return _react2.default.createElement(
 	        'div',
 	        null,
@@ -26747,7 +26755,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          { className: 'absolute' },
 	          _react2.default.createElement(
 	            'div',
-	            { className: 'main-content' },
+	            { className: 'main-content', style: { height: height } },
 	            _react2.default.createElement(
 	              'h1',
 	              { className: 'headline' },

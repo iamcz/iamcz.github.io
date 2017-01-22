@@ -56,14 +56,19 @@ export default class Home extends Component {
     if ("vibrate" in navigator) {
       navigator.vibrate(1000);
     }
+    window.addEventListener('resize', () => {
+      this.setState({ height: window.innerHeight });
+    });
+    this.setState({ height: window.innerHeight });
   }
 
   render() {
+    const { height } = this.state;
     return (
       <div>
         <HeatMap />
         <div className='absolute'>
-          <div className='main-content'>
+          <div className='main-content' style={{ height }}>
             <h1 className='headline'>{`I am ${this.getIdentity()}`}</h1>
           </div>
         </div>
