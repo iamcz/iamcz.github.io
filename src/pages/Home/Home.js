@@ -39,7 +39,7 @@ export default class Home extends Component {
   }
 
   setTimer = () => {
-    setTimeout(() => {
+    window.setTimeout(() => {
       this.updateIdentity()
       this.setTimer()
     }, this.isFull() ? DELAY : RATE);

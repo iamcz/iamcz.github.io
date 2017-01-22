@@ -26704,11 +26704,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var erasing = erasingShouldChange ? !_this.state.erasing : _this.state.erasing;
 	      var identityCharCount = _this.state.identityCharCount + (erasing ? -1 : 1);
 	
-	      // this.setState({ identityIndex, identityCharCount, erasing });
+	      _this.setState({ identityIndex: identityIndex, identityCharCount: identityCharCount, erasing: erasing });
 	    };
 	
 	    _this.setTimer = function () {
-	      setTimeout(function () {
+	      window.setTimeout(function () {
 	        _this.updateIdentity();
 	        _this.setTimer();
 	      }, _this.isFull() ? DELAY : RATE);
@@ -26814,7 +26814,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var POINT_RADIUS = 20;
 	var BLUR_RADIUS = 60;
 	var GRADIENT = { 0: 'white', 1: '#bb0a1e' };
-	var NUM_RUNS = 50;
+	var NUM_RUNS = 5;
 	
 	var HeatMap = function (_PureComponent) {
 	  _inherits(HeatMap, _PureComponent);
@@ -26876,7 +26876,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  memory: _react.PropTypes.number };
 	HeatMap.defaultProps = {
 	  numPaths: 3,
-	  frameRate: 0.05 * 1000,
+	  frameRate: 0.02 * 1000,
 	  stepSize: Number.MIN_VALUE,
 	  memory: 1000
 	};
