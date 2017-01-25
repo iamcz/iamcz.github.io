@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import HeatMap from './HeatMap';
+import HeatMap from 'HeatMap';
+import LiveText from 'LiveText';
 
 const VIBRATE_ENABLED = !!window.navigator;
 
@@ -10,57 +11,25 @@ const IDENTITIES = [
 
 const RATE = 0.15 * 1000;
 const DELAY = 3 * 1000;
+const RESIZE = 'resize';
 
 export default class Home extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      identityIndex: 0,
-      identityCharCount: IDENTITIES[0].length,
-      erasing: true,
-    };
+    this.state = {};
   }
 
-  getFullIdentity = () => IDENTITIES[this.state.identityIndex];
-  getIdentity = () => this.getFullIdentity().slice(0, this.state.identityCharCount);
-  isFull = () => this.state.identityCharCount === (this.getFullIdentity().length);
-  isEmpty = () => this.state.identityCharCount === 0;
-
-  updateIdentity = () => {
-    const isEmpty = this.isEmpty();
-    const isFull = this.isFull();
-    const identityIndex = isEmpty ?
-      (this.state.identityIndex + 1) % IDENTITIES.length :
-      this.state.identityIndex;
-
-    const erasingShouldChange = (this.state.erasing && isEmpty) || (!this.state.erasing && isFull);
-    const erasing = erasingShouldChange ? !this.state.erasing : this.state.erasing;
-    const identityCharCount = this.state.identityCharCount + (erasing ? -1 : 1);
-
-    this.setState({ identityIndex, identityCharCount, erasing });
-  }
-
-  setTimer = () => {
-    window.setTimeout(() => {
-      this.updateIdentity()
-      this.setTimer()
-    }, this.isFull() ? DELAY : RATE);
-  }
-
-  setDeviceHeights = () => {
-  }
+  getState = () => { return { height: window.innerHeight }; }
+  updateHeight = () => { this.setState(this.getState()); }
+  setResizeListener = () => { window.addEventListener(RESIZE, this.updateHeight); }
+  clearResizeListener = () => { window.removeEventListener(RESIZE, this.updateHeight); }
 
   componentDidMount() {
-    this.setTimer();
-    this.setDeviceHeights()
-    if ("vibrate" in navigator) {
-      navigator.vibrate(1000);
-    }
-    window.addEventListener('resize', () => {
-      console.log('foobar');
-      this.setState({ height: window.innerHeight });
-    });
-    this.setState({ height: window.innerHeight });
+    this.setResizeListener();
+  }
+
+  componentWillUnmount() {
+    this.clearResizeListener();
   }
 
   render() {
@@ -70,7 +39,10 @@ export default class Home extends Component {
         <HeatMap />
         <div className='absolute'>
           <div className='main-content' style={{ height }}>
-            <h1 className='headline'>{`I am ${this.getIdentity()}`}</h1>
+            <h1 className='headline'>
+              {'I am '}
+              <LiveText texts={IDENTITIES} />
+            </h1>
           </div>
         </div>
       </div>

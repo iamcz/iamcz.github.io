@@ -6,7 +6,6 @@
   "scripts": {
     "build": "DEPLOY=1 webpack",
     "watch": "webpack -w",
-    "regenerate-template": "GENERATE_STATIC_PAGES=1 webpack",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack-dev-server --inline"
   },

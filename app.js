@@ -26610,7 +26610,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _Home3 = _interopRequireDefault(_Home2);
 	
-	var _NotFound2 = __webpack_require__(240);
+	var _NotFound2 = __webpack_require__(242);
 	
 	var _NotFound3 = _interopRequireDefault(_NotFound2);
 	
@@ -26658,6 +26658,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _HeatMap2 = _interopRequireDefault(_HeatMap);
 	
+	var _LiveText = __webpack_require__(240);
+	
+	var _LiveText2 = _interopRequireDefault(_LiveText);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -26672,6 +26676,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var RATE = 0.15 * 1000;
 	var DELAY = 3 * 1000;
+	var RESIZE = 'resize';
 	
 	var Home = function (_Component) {
 	  _inherits(Home, _Component);
@@ -26681,66 +26686,35 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    var _this = _possibleConstructorReturn(this, (Home.__proto__ || Object.getPrototypeOf(Home)).call(this, props));
 	
-	    _this.getFullIdentity = function () {
-	      return IDENTITIES[_this.state.identityIndex];
+	    _this.getState = function () {
+	      return { height: window.innerHeight };
 	    };
 	
-	    _this.getIdentity = function () {
-	      return _this.getFullIdentity().slice(0, _this.state.identityCharCount);
+	    _this.updateHeight = function () {
+	      _this.setState(_this.getState());
 	    };
 	
-	    _this.isFull = function () {
-	      return _this.state.identityCharCount === _this.getFullIdentity().length;
+	    _this.setResizeListener = function () {
+	      window.addEventListener(RESIZE, _this.updateHeight);
 	    };
 	
-	    _this.isEmpty = function () {
-	      return _this.state.identityCharCount === 0;
+	    _this.clearResizeListener = function () {
+	      window.removeEventListener(RESIZE, _this.updateHeight);
 	    };
 	
-	    _this.updateIdentity = function () {
-	      var isEmpty = _this.isEmpty();
-	      var isFull = _this.isFull();
-	      var identityIndex = isEmpty ? (_this.state.identityIndex + 1) % IDENTITIES.length : _this.state.identityIndex;
-	
-	      var erasingShouldChange = _this.state.erasing && isEmpty || !_this.state.erasing && isFull;
-	      var erasing = erasingShouldChange ? !_this.state.erasing : _this.state.erasing;
-	      var identityCharCount = _this.state.identityCharCount + (erasing ? -1 : 1);
-	
-	      _this.setState({ identityIndex: identityIndex, identityCharCount: identityCharCount, erasing: erasing });
-	    };
-	
-	    _this.setTimer = function () {
-	      window.setTimeout(function () {
-	        _this.updateIdentity();
-	        _this.setTimer();
-	      }, _this.isFull() ? DELAY : RATE);
-	    };
-	
-	    _this.setDeviceHeights = function () {};
-	
-	    _this.state = {
-	      identityIndex: 0,
-	      identityCharCount: IDENTITIES[0].length,
-	      erasing: true
-	    };
+	    _this.state = {};
 	    return _this;
 	  }
 	
 	  _createClass(Home, [{
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
-	      var _this2 = this;
-	
-	      this.setTimer();
-	      this.setDeviceHeights();
-	      if ("vibrate" in navigator) {
-	        navigator.vibrate(1000);
-	      }
-	      window.addEventListener('resize', function () {
-	        console.log('foobar');
-	        _this2.setState({ height: window.innerHeight });
-	      });
-	      this.setState({ height: window.innerHeight });
+	      this.setResizeListener();
+	    }
+	  }, {
+	    key: 'componentWillUnmount',
+	    value: function componentWillUnmount() {
+	      this.clearResizeListener();
 	    }
 	  }, {
 	    key: 'render',
@@ -26760,7 +26734,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            _react2.default.createElement(
 	              'h1',
 	              { className: 'headline' },
-	              'I am ' + this.getIdentity()
+	              'I am ',
+	              _react2.default.createElement(_LiveText2.default, { texts: IDENTITIES })
 	            )
 	          )
 	        )
@@ -27196,6 +27171,154 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 240 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = undefined;
+	
+	var _LiveText = __webpack_require__(241);
+	
+	var _LiveText2 = _interopRequireDefault(_LiveText);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	exports.default = _LiveText2.default;
+
+/***/ },
+/* 241 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var RATE = 0.15 * 1000;
+	var DELAY = 3 * 1000;
+	
+	var LiveText = function (_Component) {
+	  _inherits(LiveText, _Component);
+	
+	  function LiveText(props) {
+	    _classCallCheck(this, LiveText);
+	
+	    var _this = _possibleConstructorReturn(this, (LiveText.__proto__ || Object.getPrototypeOf(LiveText)).call(this, props));
+	
+	    _initialiseProps.call(_this);
+	
+	    _this.state = _this.getStateFromProps(props);
+	    return _this;
+	  }
+	
+	  _createClass(LiveText, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      this.setTimer();
+	    }
+	  }, {
+	    key: 'componentWillUnmount',
+	    value: function componentWillUnmount() {
+	      this.clearTimer();
+	      this.clearResizeListener();
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'span',
+	        null,
+	        this.getIdentity()
+	      );
+	    }
+	  }]);
+	
+	  return LiveText;
+	}(_react.Component);
+	
+	LiveText.propTypes = {
+	  texts: _react.PropTypes.arrayOf(_react.PropTypes.string).isRequired
+	};
+	
+	var _initialiseProps = function _initialiseProps() {
+	  var _this2 = this;
+	
+	  this.getStateFromProps = function (props) {
+	    return {
+	      identityIndex: 0,
+	      identityCharCount: props.texts[0].length,
+	      erasing: true
+	    };
+	  };
+	
+	  this.getFullIdentity = function () {
+	    return _this2.props.texts[_this2.state.identityIndex];
+	  };
+	
+	  this.getIdentity = function () {
+	    return _this2.getFullIdentity().slice(0, _this2.state.identityCharCount);
+	  };
+	
+	  this.isFull = function () {
+	    return _this2.state.identityCharCount === _this2.getFullIdentity().length;
+	  };
+	
+	  this.isEmpty = function () {
+	    return _this2.state.identityCharCount === 0;
+	  };
+	
+	  this.updateIdentity = function () {
+	    var isEmpty = _this2.isEmpty();
+	    var isFull = _this2.isFull();
+	    var identityIndex = isEmpty ? (_this2.state.identityIndex + 1) % _this2.props.texts.length : _this2.state.identityIndex;
+	
+	    var erasingShouldChange = _this2.state.erasing && isEmpty || !_this2.state.erasing && isFull;
+	    var erasing = erasingShouldChange ? !_this2.state.erasing : _this2.state.erasing;
+	    var identityCharCount = _this2.state.identityCharCount + (erasing ? -1 : 1);
+	
+	    _this2.setState({ identityIndex: identityIndex, identityCharCount: identityCharCount, erasing: erasing });
+	  };
+	
+	  this.setTimer = function () {
+	    _this2.timer = window.setTimeout(function () {
+	      _this2.updateIdentity();
+	      if (_this2.timer) {
+	        _this2.setTimer();
+	      }
+	    }, _this2.isFull() ? DELAY : RATE);
+	  };
+	
+	  this.clearTimer = function () {
+	    delete _this2.timer;
+	  };
+	
+	  this.updateHeight = function () {
+	    _this2.setState({ height: window.innerHeight });
+	  };
+	};
+	
+	exports.default = LiveText;
+
+/***/ },
+/* 242 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
