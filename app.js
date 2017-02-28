@@ -26672,7 +26672,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var VIBRATE_ENABLED = !!window.navigator;
 	
-	var IDENTITIES = ['Charles Zahn', 'c + i'];
+	var IDENTITIES = ['Charles Zahn', 'c + i', '99SUBLIME'];
 	
 	var RATE = 0.15 * 1000;
 	var DELAY = 3 * 1000;

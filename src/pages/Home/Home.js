@@ -7,6 +7,7 @@ const VIBRATE_ENABLED = !!window.navigator;
 const IDENTITIES = [
   'Charles Zahn',
   'c + i',
+  '99SUBLIME',
 ];
 
 const RATE = 0.15 * 1000;
