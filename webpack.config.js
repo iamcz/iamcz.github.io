@@ -1,43 +1,35 @@
 const path = require('path');
-const ReactStaticPlugin = require('react-static-webpack-plugin');
-const deploy = process.env.DEPLOY === '1';
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-  devtool: 'source-map',
-
-  context: __dirname,
-
-  entry: {
-    app: './src/index.js',
-  },
-
+  mode: 'development',
+  entry: './src/index.js',
   output: {
-    path: deploy ? path.join(__dirname) : path.join(__dirname, 'bundle'),
-    filename: '[name].js',
-    libraryTarget: 'umd',
-    publicPath: '/',
+    filename: 'bundle.[contenthash].js',
+    path: path.resolve(__dirname, 'dist'),
+    clean: true,
   },
-
-  plugins: (
-    deploy ?
-      [new ReactStaticPlugin({ routes: './src/routes.js', template: './template.js', })]
-      : []
-  ),
-
-  resolve: {
-    modulesDirectories: ['node_modules', 'components', 'pages'],
-  },
-
   module: {
-    loaders: [
+    rules: [
       {
-        test: /\.js$/,
-        loader: 'babel',
-        exclude: path.join(__dirname, 'node_modules'),
-        query: {
-          presets: ['es2015', 'stage-0', 'react'],
-        },
+        test: /\.css$/i,
+        use: ['style-loader', 'css-loader'],
       },
     ],
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: './src/index.html',
+      filename: 'index.html',
+    }),
+  ],
+  devServer: {
+    static: {
+      directory: path.join(__dirname, 'dist'),
+    },
+    compress: true,
+    port: 8080,
+    open: true,
+    hot: true,
   },
 };
